@@ -3,12 +3,13 @@ import {
   COMMENT_ADDED,
   CHANGE_COMMENT_CONTENT,
   CHANGE_COMMENT_TITLE,
-  GET_COMMENTS
+  GET_COMMENTS,
+  LOAD_COMMENTS
 } from '../constants/comment';
 
 const initialState = {
   is_comment_added: false,
-  comments: [],
+  comments_list: [],
   content: "",
   title: ""
 }
@@ -30,15 +31,15 @@ export default (state = initialState, action) => {
         ...state,
         title: action.title
       };
-    case GET_COMMENTS:
+    case LOAD_COMMENTS:
       return {
         ...state,
-        comments: state.comments
+        comments_list: action.comments
       };
     case ADD_COMMENT:
       return {
         ...state,
-        comments: (state.comments || []).concat([action.payload])
+        comments_list: (state.comments_list || []).concat([action.payload])
       };
     default:
       return state;

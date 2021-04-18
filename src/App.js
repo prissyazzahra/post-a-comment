@@ -9,11 +9,11 @@ import Modal from "./components/Modal";
 import Input from "./components/Input";
 
 import {
-  ADD_COMMENT,
-  CHANGE_COMMENT_CONTENT,
-  CHANGE_COMMENT_TITLE,
-  GET_COMMENTS
-} from "./constants/comment";
+  addComment,
+  changeContent,
+  changeTitle,
+  loadComments,
+} from "./actions/action";
 
 
 class App extends React.Component {
@@ -21,7 +21,6 @@ class App extends React.Component {
     super();
     this.state = {
       isOpen: false,
-      id: 0
     }
   }
 
@@ -31,7 +30,7 @@ class App extends React.Component {
 
   onClickSubmit = (data) => {
     const payload = {
-      id: this.state.id,
+      id: Math.random().toString().slice(2,6),
       title: data[0],
       content: data[1],
     }
@@ -39,8 +38,13 @@ class App extends React.Component {
     return payload;
   }
 
-  render() {
+  componentDidMount() {
+    if (localStorage.getItem('state') !== null) {
+      this.props.loadState(JSON.parse(localStorage.getItem('state')));
+    }
+  }
 
+  render() {
     return (
       <Container>
         {this.state.isOpen &&
@@ -88,7 +92,7 @@ class App extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    comments: state.comments.comments,
+    comments: state.comments.comments_list,
     content: state.comments.content,
     title: state.comments.title,
     is_comment_added: state.comments.is_comment_added,
@@ -97,13 +101,13 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
   addComment: (payload) =>
-    dispatch({ type: ADD_COMMENT, payload }),
+    dispatch(addComment(payload)),
   onChangeContent: (content) =>
-    dispatch({ type: CHANGE_COMMENT_CONTENT, content }),
+    dispatch(changeContent(content)),
   onChangeTitle: (title) =>
-    dispatch({ type: CHANGE_COMMENT_TITLE, title }),
-  getComments: () =>
-    dispatch({ type: GET_COMMENTS })
+    dispatch(changeTitle(title)),
+  loadState: (data) =>
+    dispatch(loadComments(data))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
