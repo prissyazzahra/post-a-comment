@@ -69,13 +69,18 @@ class App extends React.Component {
             Add a Comment!
           </Button>
         </div>
-        {this.props.comments.map(item =>
-          <Card
-            key={item.id}
-            title={item.title}
-            content={item.content}
-          />
-        )}
+        {
+          this.props.comments.length > 0 ?
+            this.props.comments.map(item =>
+              <Card
+                key={item.id}
+                title={item.title}
+                content={item.content}
+              />
+            )
+            :
+            <h2>No comments yet :(</h2>
+        }
       </Container>
     );
   }
